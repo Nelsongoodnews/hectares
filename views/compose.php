@@ -1,0 +1,78 @@
+<?php 
+     if($_SESSION['accessytpe'] == "Student"){
+        echo "<script>window.location='dashboard'</script>";
+    }
+?>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+     <h1 class="h3 ml-4 mb-4 text-gray-800">Compose Mail</h1>
+     <a href="mailbox"><button style="background-color:#e4b461 !important; color:#fff !important; font-size:1rem" class="d-sm-inline-block btn btn-sm shadow-sm mx-4 px-1 py-2" id="printNone"><i style="color:#fff !important;"
+                                class="fas fa-mail-bulk fa-sm text-white-50"></i> View Sent Mails</button></a>
+     </div>
+     <?php 
+        include("config/dblink.php");
+        $connect = new Hectares();
+        if($_POST){
+            extract($_POST);
+            $tblquery = "INSERT INTO hec_mailbox VALUES(:mail_ID, :mail_sender, :mail_receiver, :mail_message, :mail_subject, :sent_at)";
+            $tblvalue = array(
+                ':mail_ID' => NULL,
+                ':mail_sender' => "Hectares of Diamond Institute",
+                ':mail_receiver' => htmlspecialchars($receiver),
+                ':mail_message' => htmlspecialchars($message),
+                ':mail_subject' => htmlspecialchars($subject),
+                ':sent_at' => date("Y-m-d H:i:s")
+            );
+            $mail =$connect->tbl_insert($tblquery, $tblvalue);
+            if($mail){
+
+        
+     ?>
+            <div class="row mb-5">
+          <div class="col-md"></div>
+          <div class="col-md-8">
+          <div class="card border-left-success shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                          YOUR MESSAGE HAS SUCCESSFULLY BEEN SENT TO <?php echo $receiver;?>                                       <i class="fas fa-smile-wink fa-2x ml-4" style="color:#e4b461 !important"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+          </div>
+          <div class="col-md"></div>
+     </div>
+     <?php
+            }
+        }
+     ?>
+    <div class="container-fluid">
+     <div class="card o-hidden border-0 shadow-lg">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-imagec"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <form method="POST" action="compose" class="user">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                           name="receiver"  placeholder="Receiver's Email" required>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                          name="subject"  placeholder="Subject Here" required>
+                                    </div>
+                                </div>
+                                <textarea name="message" rows="12" class="form-control mb-3" required>Message Here!</textarea>
+                                <button type="submit" class="btn btn-user btn-block" style="font-size:1.2rem; background-color:#e4b461; color:#ffffff">
+                                    Send Message <i class="fas fa-paper-plane"></i>
+                                        </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
